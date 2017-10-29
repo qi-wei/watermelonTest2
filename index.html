@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html>
     <head>
-
+    <link rel="stylesheet" type="text/css" href="stuff.css">
     <script src="https://rawgit.com/mattdiamond/Recorderjs/master/dist/recorder.js">
     </script>
         
     
     </head>
     <body>
-        <script>
+       
+    <div class="wrap">
+         <script>
+ 
     navigator.mediaDevices.getUserMedia({
   audio: true
 })
@@ -29,14 +32,29 @@
       au.play();
       let a = document.createElement('a');
       a.href = url;
-      a.innerHTML = 'download';
+      a.innerHTML = 'Download';
       a.download = 'filename.wav';
       document.body.appendChild(a);
     });
   }, 3000);
 })
+      
+    function postData(input) {
+    $.ajax({
+        type: "POST",
+        url: "/main.py",
+        data: { param: input },
+        success: callbackFunc
+    });
+}
+    function callbackFunc(response) {
+        console.log("something works");
+        console.log(response);
+}
+    postData('filename.wav');
+
+postData('data to process');
         </script>
-        
         <h1> 
             Watermelon Thump Test
         </h1>
@@ -45,10 +63,9 @@
         </h3>
         
         <div class="flex-container">
-            <button type="button" class="flex-item">Record</button>
-            <button type="button" class="flex-item">Stop</button>
-            <button type="button" class="flex-item">Play</button>
+           <img src="cute.png" width="400" height="320">
         </div>
+    </div>
     </body>
 
 </html>
