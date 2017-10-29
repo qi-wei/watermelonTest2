@@ -1,8 +1,39 @@
 <!DOCTYPE html>
 <html>
     <head>
+    <audio id="player" controls></audio>
+    <script src="https://rawgit.com/mattdiamond/Recorderjs/master/dist/recorder.js">
+    
+    navigator.mediaDevices.getUserMedia({
+    audio: true
+    })
+        .then(stream => {
+  const aCtx = new AudioContext();
+  const streamSource = aCtx.createMediaStreamSource(stream);
+  var rec = new Recorder(streamSource);
+  rec.record();
+  setTimeout(() => {
+    stream.getTracks().forEach(t => t.stop());
+    rec.stop()
+    rec.exportWAV((blob) => {
+      // now we could send this blob with an FormData too
+      const url = URL.createObjectURL(blob);
+      let au = new Audio(url);
+      au.controls = true;
+      document.body.appendChild(au);
+      au.play();
+      let a = document.createElement('a');
+      a.href = url;
+      a.innerHTML = 'download';
+      a.download = 'filename.wav';
+      document.body.appendChild(a);
+    });
+  }, 3000);
+})
         
     
+    </script>
+        
     
     </head>
     <body>
@@ -12,7 +43,12 @@
         <h3>
             Thump your watermelon and find out if it's ripe!
         </h3>
-    
+        
+        <div class="flex-container">
+            <button type="button" class="flex-item">Record</button>
+            <button type="button" class="flex-item">Stop</button>
+            <button type="button" class="flex-item">Play</button>
+        </div>
     </body>
 
 </html>
